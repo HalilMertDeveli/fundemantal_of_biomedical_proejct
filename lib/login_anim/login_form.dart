@@ -24,11 +24,13 @@ class _LoginFormState extends State<LoginForm> {
 
   //1-)we created trigger for animation
   var animationLink = 'assets/login.riv';
+  Artboard? artboard;
+  late StateMachineController? stateMachineController;
+
+
   late SMITrigger failTrigger, successTrigger;
   late SMIBool isChecking, isHandsUp;
   late SMINumber lookNum;
-  Artboard? artboard;
-  late StateMachineController? stateMachineController;
 
   //2-) We created init state
   @override
@@ -41,8 +43,10 @@ class _LoginFormState extends State<LoginForm> {
     rootBundle.load(animationLink).then((value) {
       final file = RiveFile.import(value);
       final art = file.mainArtboard;
+
       stateMachineController =
           StateMachineController.fromArtboard(art, "Login Machine")!;
+
       if (stateMachineController != null) {
         art.addController(stateMachineController!);
         for(var element in stateMachineController!.inputs){

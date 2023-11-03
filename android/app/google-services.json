@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "761576156460",
+    "project_id": "fundamantalsofbiomedical",
+    "storage_bucket": "fundamantalsofbiomedical.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761576156460:android:8442e7651839c83b071089",
+        "android_client_info": {
+          "package_name": "com.example.fundemetals_of_biomedical"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFUTICh06CpTJI8NxnZIw9VieaCYZ2a94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
