@@ -120,7 +120,7 @@ class _LoginFormState extends State<LoginForm> {
                 TextFormField(
                   onTap: checking,//move eyes
                   onChanged: ((value)=>moveEyes(value)),//move eyes
-                  decoration: InputDecoration(labelText: 'Name'),
+                  decoration: InputDecoration(labelText: 'Email adresinizi giriniz :',labelStyle: TextStyle(fontSize: 20,color: Colors.black),border: OutlineInputBorder(),),
                   onSaved: (value) {
                     _name = value!;
                   },
@@ -131,9 +131,10 @@ class _LoginFormState extends State<LoginForm> {
                     return null;
                   },
                 ),
+                SizedBox(height: 20,),
                 TextFormField(
                   onTap: handsUp,
-                  decoration: InputDecoration(labelText: 'Email'),
+                  decoration: InputDecoration(labelText: 'Şifrenizi giriniz :',labelStyle: TextStyle(fontSize: 20.0,color: Colors.black),border: OutlineInputBorder()),
                   onSaved: (value) {
                     _email = value!;
                   },
@@ -150,7 +151,7 @@ class _LoginFormState extends State<LoginForm> {
                     _submitForm();
                     login();
                   },
-                  child: Text('Submit'),
+                  child: Text('Login'),
                 ),
               ],
             ),
