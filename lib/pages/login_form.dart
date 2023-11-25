@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fundemetals_of_biomedical/pages/register_page.dart';
+import 'package:fundemetals_of_biomedical/login_anim/bear_login_animation.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -18,8 +18,8 @@ class _LoginFormState extends State<LoginForm> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            BearAnimation(),
-            bearStateless.build(context)
+            BearLoginAnimation(),
+            BearStateless(),
           ],
         ),
       ),

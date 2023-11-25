@@ -1,23 +1,44 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fundemetals_of_biomedical/pages/register_from.dart';
+import 'package:fundemetals_of_biomedical/util/util.dart';
 import 'package:rive/rive.dart';
 
 class BearStateless extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return Text("Hello world");
+    return Text.rich(
+      TextSpan(
+        text: "Hesabınız yok mu ?",
+        style: TextStyle(color: Colors.black,fontSize: 14),
+        children: <TextSpan>[
+          TextSpan(
+            text: "Register here",
+            style: TextStyle(
+              color: Colors.black,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()..onTap = (){
+              navigatePage(context,RegisterForm());
+            }
+          ) 
+
+        ]
+      )
+    );
   }
 
 }
 
-class BearAnimation extends StatefulWidget {
+class BearLoginAnimation extends StatefulWidget {
   @override
-  State<BearAnimation> createState() => _BearAnimationState();
+  State<BearLoginAnimation> createState() => _BearLoginAnimationState();
 }
 
-class _BearAnimationState extends State<BearAnimation> {
+class _BearLoginAnimationState extends State<BearLoginAnimation> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _name = '';
+  String _password = '';
   String _email = '';
 
   var animationLink = 'assets/login.riv';
@@ -40,7 +61,7 @@ class _BearAnimationState extends State<BearAnimation> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print('Name: $_name');
+      print('Name: $_password');
       print('Email: $_email');
     }
   }
@@ -94,7 +115,7 @@ class _BearAnimationState extends State<BearAnimation> {
   login() {
     isHandsUp.change(false);
     isChecking.change(false);
-    if (_email == "admin" || _name == 'admin') {
+    if (_email == "admin" || _password == 'admin') {
       successTrigger.fire();
     } else {
       failTrigger.fire();
@@ -127,7 +148,7 @@ class _BearAnimationState extends State<BearAnimation> {
                   border: OutlineInputBorder(),
                 ),
                 onSaved: (value) {
-                  _name = value!;
+                  _password = value!;
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
