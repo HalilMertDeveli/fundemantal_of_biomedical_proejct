@@ -19,11 +19,10 @@ class _RegisterFormState extends State<RegisterForm> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            BearRegisterAnimation()
+            BearRegisterAnimation(),
           ],
         ),
       ),
-      
     );
   }
 }

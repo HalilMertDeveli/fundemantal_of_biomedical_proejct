@@ -8,31 +8,32 @@ void navigatePage(BuildContext context, Widget pageName) {
     ),
   );
 }
+
 class CustomTextField extends StatelessWidget {
   CustomTextField(
-      {
-        required this.icon,
-        required this.hint,
-        this.obsecure = false,
-        required this.validator,
-        required this.onSaved,
-        this.checking,
-        this.moveEyes
-      });
+      {required this.icon,
+      required this.hint,
+      this.obsecure = false,
+      required this.validator,
+      required this.onSaved,
+      this.checking,
+      this.moveEyes});
+
   final FormFieldSetter<String> onSaved;
   final Icon icon;
   final String hint;
   final bool obsecure;
   final FormFieldValidator<String> validator;
-   VoidCallback? checking;
-   void Function(dynamic)? moveEyes;
+  VoidCallback? checking;
+  void Function(dynamic)? moveEyes;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
       child: TextFormField(
-        onChanged: (value)=>moveEyes ??=null,
-        onTap: ()=>checking ??= null,
+        onChanged: (value) => moveEyes ??= null,
+        onTap: () => checking ??= null,
         onSaved: onSaved,
         validator: validator,
         autofocus: true,
@@ -68,6 +69,7 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
 Widget filledButton(String text, Color splashColor, Color highlightColor,
     Color fillColor, Color textColor, void function()) {
   return MaterialButton(
@@ -76,8 +78,8 @@ Widget filledButton(String text, Color splashColor, Color highlightColor,
     highlightColor: highlightColor,
     elevation: 0.0,
     color: fillColor,
-    shape: RoundedRectangleBorder(
-        borderRadius: new BorderRadius.circular(30.0)),
+    shape:
+        RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
     child: Text(
       text,
       style: TextStyle(
@@ -88,6 +90,7 @@ Widget filledButton(String text, Color splashColor, Color highlightColor,
     },
   );
 }
+
 String? validatePassword(String? value) {
   if (value!.isEmpty) {
     return 'Lütfen bir Şifre giriniz';
@@ -95,8 +98,7 @@ String? validatePassword(String? value) {
   if (value.length < 8) {
     return "Şifre 8 karakterden düşük olamaz";
   }
-  if (value =="")
-    return "Lütfen bir şifre sağlayın";
+  if (value == "") return "Lütfen bir şifre sağlayın";
   if (!value.contains(RegExp(r'[a-zA-Z]'))) {
     return "Şifrende en az bir büyük harf ve bir küçük harfe sahip olmalıdır";
   }
@@ -106,24 +108,18 @@ String? validatePassword(String? value) {
   return null;
 }
 
-String ? validateEmailAddress(String ? value){
-
-
+String? validateEmailAddress(String? value) {
   if (value == null || value.isEmpty) {
     return 'Please enter an email address';
-
-  }
-
-
-  else {
+  } else {
     return null;
   }
 }
-String? validateUserName(String ? value){
-  if (value == null || value.isEmpty  ){
+
+String? validateUserName(String? value) {
+  if (value == null || value.isEmpty) {
     return "Lütfen bir isim sağlayın";
-  }
-  else{
+  } else {
     return null;
   }
 }

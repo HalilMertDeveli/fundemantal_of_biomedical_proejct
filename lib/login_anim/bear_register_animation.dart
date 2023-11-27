@@ -16,8 +16,6 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   TextEditingController dateInput = TextEditingController();
   String? _password = '';
 
-
-
   var animationLink = 'assets/login.riv';
 
   Artboard? artboard;
@@ -30,12 +28,17 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
 
   late SMINumber lookNum;
 
-  void _submitForm() {
+  bool _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       print('Name: $_name');
       print('Email: $_email');
       print("password :$_password");
+      print("birth date:${dateInput.text}");
+      return true;
+    }
+    else{
+      return false;
     }
   }
 
@@ -75,7 +78,6 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
     super.initState();
     dateInput.text = "";
     initArtboard();
-
   }
 
   void checking() {
@@ -96,7 +98,8 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   login() {
     isHandsUp.change(false);
     isChecking.change(false);
-    if (_email == "admin" || _name == 'admin') {
+    bool validateResult=_submitForm();
+    if (validateResult) {
       successTrigger.fire();
     } else {
       failTrigger.fire();
@@ -159,7 +162,9 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                   return validateEmailAddress(value);
                 },
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               TextFormField(
                 onTap: handsUp,
                 decoration: InputDecoration(
@@ -185,44 +190,25 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                       labelText: "Lütfen Doğum Tarhinizi giriniz:",
                     ),
                     readOnly: true,
-                    onTap: ()async{
+                    onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1950),
-                          lastDate: DateTime(2100)
-                      );
-                      if (pickedDate != null){
+                          lastDate: DateTime(2100));
+                      if (pickedDate != null) {
                         print(pickedDate);
-                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(formattedDate);//date value is here for usages
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(formattedDate); //date value is here for usages
 
                         setState(() {
-                          dateInput.text =
-                              formattedDate;
+                          dateInput.text = formattedDate;
                         });
-                      }
-                      else{
-
                       }
                     },
                   ),
                 ),
-              ),
-
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                    print(_name);
-                    print(_email);
-                    print(_password);
-                    print(dateInput.text);
-                  }
-                  _submitForm();
-                  login();
-                },
-                child: Text('Login'),
               ),
               filledButton(
                 "Kullanıcı Oluştur",
@@ -230,7 +216,11 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                 Colors.black12,
                 Colors.black45,
                 Colors.white,
-                () {},
+                () {
+                  _submitForm();//we are getting values here
+                  login();
+
+                },
               )
             ],
           ),
