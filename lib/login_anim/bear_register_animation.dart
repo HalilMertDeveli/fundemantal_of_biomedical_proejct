@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fundemetals_of_biomedical/util/util.dart';
 import 'package:rive/rive.dart';
+import 'package:intl/intl.dart';
 
 class BearRegisterAnimation extends StatefulWidget {
   @override
@@ -12,23 +13,10 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _name = '';
   String _email = '';
-  DateTime selectedDate = DateTime.now();
+  TextEditingController dateInput = TextEditingController();
   String? _password = '';
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
 
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
 
   var animationLink = 'assets/login.riv';
 
@@ -47,6 +35,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
       _formKey.currentState!.save();
       print('Name: $_name');
       print('Email: $_email');
+      print("password :$_password");
     }
   }
 
@@ -84,7 +73,9 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   @override
   void initState() {
     super.initState();
+    dateInput.text = "";
     initArtboard();
+
   }
 
   void checking() {
@@ -129,34 +120,18 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                   artboard: artboard!,
                 ),
               ),
-              CustomTextField(
-                hint: "İsminizi giriniz",
-                icon: Icon(Icons.verified_user),
-                onSaved: (String? input) {
-                  _password = input;
-                },
-                validator: (String? value) {
-                  return validateUserName(value);
-                },
-              ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
-              CustomTextField(
-                icon: Icon(Icons.email),
-                hint: "Lütfen Email adresinizi giriniz  (custom)",
-                validator: (value) => validateEmailAddress(value),
-                onSaved: (value) => _name = value!,
-                moveEyes: moveEyes,
-                checking: checking,
-              ),
+
+              //time picker region end
               TextFormField(
                 onTap: checking,
                 //move eyes
                 onChanged: ((value) => moveEyes(value)),
                 //move eyes
                 decoration: InputDecoration(
-                  labelText: 'Email adresinizi giriniz :',
+                  labelText: 'isminizi giriniz :',
                   labelStyle: TextStyle(fontSize: 20, color: Colors.black),
                   border: OutlineInputBorder(),
                 ),
@@ -164,50 +139,88 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                   _name = value!;
                 },
                 validator: (value) {
-                  return validateEmailAddress(value);
+                  return validateUserName(value);
                 },
               ),
               SizedBox(
                 height: 20,
               ),
               TextFormField(
-                onTap: handsUp,
+                onTap: checking,
+                onChanged: ((value) => moveEyes(value)),
                 decoration: InputDecoration(
-                    labelText: 'Şifrenizi belirleyiniz:',
+                    labelText: 'Email adresinizi  belirleyiniz:',
                     labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
                     border: OutlineInputBorder()),
                 onSaved: (value) {
                   _email = value!;
                 },
                 validator: (value) {
+                  return validateEmailAddress(value);
+                },
+              ),
+              SizedBox(height: 10,),
+              TextFormField(
+                onTap: handsUp,
+                decoration: InputDecoration(
+                    labelText: 'Kullanıcı şifrenizi belirleyiniz:',
+                    labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
+                    border: OutlineInputBorder()),
+                onSaved: (value) {
+                  _password = value!;
+                },
+                validator: (value) {
                   return validatePassword(value);
                 },
               ),
-              //date time
-              Text(
-                'Seçilen tarih:',
-                style: TextStyle(fontSize: 18),
-              ),
-              Text(
-                '${selectedDate.toLocal()}'.split(' ')[0],
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
+              //new time picker region
+              Container(
+                padding: EdgeInsets.all(15),
+                height: MediaQuery.of(context).size.width / 3,
+                child: Center(
+                  child: TextField(
+                    controller: dateInput,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.calendar_today),
+                      labelText: "Lütfen Doğum Tarhinizi giriniz:",
+                    ),
+                    readOnly: true,
+                    onTap: ()async{
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1950),
+                          lastDate: DateTime(2100)
+                      );
+                      if (pickedDate != null){
+                        print(pickedDate);
+                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(formattedDate);//date value is here for usages
 
-              ElevatedButton(
-                onPressed: () => _selectDate(context),
-                child: Text('Doğum tarihinizi seçiniz'),
+                        setState(() {
+                          dateInput.text =
+                              formattedDate;
+                        });
+                      }
+                      else{
+
+                      }
+                    },
+                  ),
+                ),
               ),
-              //end of region date time
+
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    print("it is wokring");
+                    print(_name);
+                    print(_email);
+                    print(_password);
+                    print(dateInput.text);
                   }
                   _submitForm();
                   login();
-                  print(selectedDate);
                 },
                 child: Text('Login'),
               ),

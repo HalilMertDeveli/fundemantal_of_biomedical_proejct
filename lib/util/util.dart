@@ -105,25 +105,25 @@ String? validatePassword(String? value) {
   }
   return null;
 }
-String? validateUserName(String ? value){
-  if (value!.isEmpty) {
-    return 'Lütfen bir isim giriniz';
-  }
-  return null;
-}
+
 String ? validateEmailAddress(String ? value){
 
-  final RegExp emailRegExp =
-  RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+
   if (value == null || value.isEmpty) {
     return 'Please enter an email address';
 
   }
 
-  if(!emailRegExp.hasMatch(value)){
-    return "Uygun bir email adresi giriniz";
-  }
+
   else {
+    return null;
+  }
+}
+String? validateUserName(String ? value){
+  if (value == null || value.isEmpty  ){
+    return "Lütfen bir isim sağlayın";
+  }
+  else{
     return null;
   }
 }
