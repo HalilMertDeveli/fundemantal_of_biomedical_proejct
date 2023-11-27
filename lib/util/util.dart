@@ -10,21 +10,29 @@ void navigatePage(BuildContext context, Widget pageName) {
 }
 class CustomTextField extends StatelessWidget {
   CustomTextField(
-      {required this.icon,
+      {
+        required this.icon,
         required this.hint,
         this.obsecure = false,
         required this.validator,
-        required this.onSaved});
+        required this.onSaved,
+        this.checking,
+        this.moveEyes
+      });
   final FormFieldSetter<String> onSaved;
   final Icon icon;
   final String hint;
   final bool obsecure;
   final FormFieldValidator<String> validator;
+   VoidCallback? checking;
+   void Function(dynamic)? moveEyes;
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
       child: TextFormField(
+        onChanged: (value)=>moveEyes ??=null,
+        onTap: ()=>checking ??= null,
         onSaved: onSaved,
         validator: validator,
         autofocus: true,

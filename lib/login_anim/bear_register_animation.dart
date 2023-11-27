@@ -13,7 +13,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   String _name = '';
   String _email = '';
   DateTime selectedDate = DateTime.now();
-  String ? _password = '';
+  String? _password = '';
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -87,7 +87,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
     initArtboard();
   }
 
-  checking() {
+  void checking() {
     isHandsUp.change(false);
     isChecking.change(true);
     lookNum.change(0);
@@ -135,12 +135,20 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                 onSaved: (String? input) {
                   _password = input;
                 },
-                validator: (String ? value ){
+                validator: (String? value) {
                   return validateUserName(value);
                 },
               ),
               SizedBox(
                 height: 20,
+              ),
+              CustomTextField(
+                icon: Icon(Icons.email),
+                hint: "Lütfen Email adresinizi giriniz  (custom)",
+                validator: (value) => validateEmailAddress(value),
+                onSaved: (value) => _name = value!,
+                moveEyes: moveEyes,
+                checking: checking,
               ),
               TextFormField(
                 onTap: checking,
@@ -165,7 +173,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
               TextFormField(
                 onTap: handsUp,
                 decoration: InputDecoration(
-                    labelText: 'Şifrenizi giriniz :',
+                    labelText: 'Şifrenizi belirleyiniz:',
                     labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
                     border: OutlineInputBorder()),
                 onSaved: (value) {
@@ -193,7 +201,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
               //end of region date time
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()){
+                  if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     print("it is wokring");
                   }
@@ -223,7 +231,4 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
       );
     }
   }
-
-
-
 }
