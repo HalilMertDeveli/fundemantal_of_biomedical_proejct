@@ -36,8 +36,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
       print("password :$_password");
       print("birth date:${dateInput.text}");
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }
@@ -98,7 +97,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   login() {
     isHandsUp.change(false);
     isChecking.change(false);
-    bool validateResult=_submitForm();
+    bool validateResult = _submitForm();
     if (validateResult) {
       successTrigger.fire();
     } else {
@@ -217,9 +216,8 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                 Colors.black45,
                 Colors.white,
                 () {
-                  _submitForm();//we are getting values here
+                  _submitForm(); //we are getting values here
                   login();
-
                 },
               )
             ],

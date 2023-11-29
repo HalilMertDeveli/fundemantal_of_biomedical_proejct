@@ -14,7 +14,7 @@ class BearStateless extends StatelessWidget{
         style: TextStyle(color: Colors.black,fontSize: 14),
         children: <TextSpan>[
           TextSpan(
-            text: "Register here",
+            text: "Yeni üyelik açınız",
             style: TextStyle(
               color: Colors.black,
               decoration: TextDecoration.underline,
