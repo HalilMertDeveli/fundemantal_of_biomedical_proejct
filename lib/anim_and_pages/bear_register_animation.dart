@@ -151,9 +151,10 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                 onTap: checking,
                 onChanged: ((value) => moveEyes(value)),
                 decoration: InputDecoration(
-                    labelText: 'Email adresinizi  belirleyiniz:',
-                    labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
-                    border: OutlineInputBorder()),
+                  labelText: 'Email adresinizi  belirleyiniz:',
+                  labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
+                  border: OutlineInputBorder(),
+                ),
                 onSaved: (value) {
                   _email = value!;
                 },

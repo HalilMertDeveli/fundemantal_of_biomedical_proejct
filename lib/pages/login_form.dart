@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fundemetals_of_biomedical/login_anim/bear_login_animation.dart';
+import 'package:fundemetals_of_biomedical/anim_and_pages/bear_login_animation.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

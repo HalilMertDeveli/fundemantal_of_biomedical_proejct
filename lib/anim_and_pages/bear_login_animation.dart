@@ -181,7 +181,7 @@ class _BearLoginAnimationState extends State<BearLoginAnimation> {
                 _submitForm();
                 login();
               },
-              child: Text('Login'),
+              child: Text('Giriş Yap'),
             ),
             ],
           ),
