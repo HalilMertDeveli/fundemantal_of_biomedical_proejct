@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fundemetals_of_biomedical/pages/page_home.dart';
+import 'package:fundemetals_of_biomedical/service_firebase/service_auth.dart';
 import 'package:fundemetals_of_biomedical/util/util.dart';
 import 'package:rive/rive.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +17,11 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   String _email = '';
   TextEditingController dateInput = TextEditingController();
   String? _password = '';
+  ServiceAuth _authService = new ServiceAuth();
+
+  bool _isLoading = false;
+  
+  
 
   var animationLink = 'assets/login.riv';
 
@@ -28,13 +35,29 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
 
   late SMINumber lookNum;
 
-  bool _submitForm() {
+  Future<bool> _submitForm()async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       _formKey.currentState!.save();
+
       print('Name: $_name');
       print('Email: $_email');
       print("password :$_password");
       print("birth date:${dateInput.text}");
+      final resultOfCreating=await _authService.registerUserWithEmailAndPassword(_name.trim(), _email.trim(), _password.toString().trim(),dateInput.text.trim());
+      if (resultOfCreating==true) {
+        navigatePage(context, PageHome());
+        setState(() {
+          _isLoading=false;
+        });
+      }
+      else{
+        print("There is error on creating user with auth");
+        
+      }
+      
       return true;
     } else {
       return false;
@@ -94,10 +117,10 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
     isChecking.change(false);
   }
 
-  login() {
+  login() async{
     isHandsUp.change(false);
     isChecking.change(false);
-    bool validateResult = _submitForm();
+    bool validateResult = await _submitForm();
     if (validateResult) {
       successTrigger.fire();
     } else {
@@ -107,6 +130,17 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
 
   @override
   Widget build(BuildContext context) {
+    if(_isLoading == true){
+      return Center(
+        child: CircularProgressIndicator(
+          color: Theme.of(context).primaryColor,
+        ),
+      );
+    }else{
+
+   
+  
+    
     if (artboard != null) {
       return Padding(
         padding: EdgeInsets.all(20.0),
@@ -232,5 +266,6 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
         child: Container(color: Colors.white),
       );
     }
+     }
   }
 }

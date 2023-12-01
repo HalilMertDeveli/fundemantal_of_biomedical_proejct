@@ -39,6 +39,8 @@ dependencies:
   firebase_core: ^2.21.0
   intl: ^0.18.1
   another_flutter_splash_screen: ^1.2.0
+  shared_preferences: ^2.2.2
+  firebase_auth: ^4.15.0
 
 
 dev_dependencies:

@@ -1,34 +1,33 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fundemetals_of_biomedical/pages/register_from.dart';
+import 'package:fundemetals_of_biomedical/pages/page_form_register.dart';
+import 'package:fundemetals_of_biomedical/pages/page_home.dart';
+import 'package:fundemetals_of_biomedical/service_firebase/service_auth.dart';
 import 'package:fundemetals_of_biomedical/util/util.dart';
 import 'package:rive/rive.dart';
 
-class BearStateless extends StatelessWidget{
+class BearStateless extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
+    return Text.rich(TextSpan(
         text: "Hesabınız yok mu ?",
-        style: TextStyle(color: Colors.black,fontSize: 14),
+        style: TextStyle(color: Colors.black, fontSize: 14),
         children: <TextSpan>[
           TextSpan(
-            text: "Yeni üyelik açınız",
-            style: TextStyle(
-              color: Colors.black,
-              decoration: TextDecoration.underline,
-            ),
-            recognizer: TapGestureRecognizer()..onTap = (){
-              navigatePage(context,RegisterForm());
-            }
-          ) 
-
-        ]
-      )
-    );
+              text: "Yeni üyelik açınız",
+              style: TextStyle(
+                color: Colors.black,
+                decoration: TextDecoration.underline,
+              ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  navigatePage(context, RegisterForm());
+                })
+        ]));
   }
-
 }
 
 class BearLoginAnimation extends StatefulWidget {
@@ -53,14 +52,37 @@ class _BearLoginAnimationState extends State<BearLoginAnimation> {
 
   late SMINumber lookNum;
 
+  bool _isLoading = false;
+  ServiceAuth serviceAuth = new ServiceAuth();
+
   @override
   void initState() {
     super.initState();
     initArtboard();
   }
-  void _submitForm() {
+
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      _email = _email.toString().trim();
+      _password = _password.toString().trim();
+      dynamic loginResult = await serviceAuth.singInEmailAndPassword(
+        userEmail: _email,
+        userPassword: _password,
+      );
+      if (loginResult == true) {
+        setState(() {
+          _isLoading = true;
+        });
+        navigatePage(context, PageHome());
+      } else {
+        setState(() {
+          _isLoading = true;
+        });
+
+        print(
+            "There is an error in login opearation and we are in else method");
+      }
       print('Name: $_password');
       print('Email: $_email');
     }
@@ -124,75 +146,86 @@ class _BearLoginAnimationState extends State<BearLoginAnimation> {
 
   @override
   Widget build(BuildContext context) {
-    if (artboard != null) {
-      return Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 400,
-                height: 350,
-                child: Rive(
-                  artboard: artboard!,
-                ),
-              ),
-              TextFormField(
-                onTap: checking, //move eyes
-                onChanged: ((value) => moveEyes(value)), //move eyes
-                decoration: InputDecoration(
-                  labelText: 'Email adresinizi giriniz :',
-                  labelStyle: TextStyle(fontSize: 20, color: Colors.black),
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (value) {
-                  _password = value!;
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your name';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                onTap: handsUp,
-                decoration: InputDecoration(
-                    labelText: 'Şifrenizi giriniz :',
-                    labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
-                    border: OutlineInputBorder()),
-                onSaved: (value) {
-                  _email = value!;
-                },
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-              ),
-              ElevatedButton(
-              onPressed: () {
-                _submitForm();
-                login();
-              },
-              child: Text('Giriş Yap'),
-            ),
-            ],
-          ),
+    if (_isLoading == true) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Theme.of(context).primaryColor,
         ),
       );
     } else {
-      return SizedBox(
-        width: 400,
-        height: 200,
-        child: Container(color: Colors.white),
-      );
+      if (artboard != null) {
+        return Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 400,
+                  height: 350,
+                  child: Rive(
+                    artboard: artboard!,
+                  ),
+                ),
+                TextFormField(
+                  onTap: checking,
+                  //move eyes
+                  onChanged: ((value) => moveEyes(value)),
+                  //move eyes
+                  decoration: InputDecoration(
+                    labelText: 'Email adresinizi giriniz :',
+                    labelStyle: TextStyle(fontSize: 20, color: Colors.black),
+                    border: OutlineInputBorder(),
+                  ),
+                  onSaved: (value) {
+                    _email = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  onTap: handsUp,
+                  decoration: InputDecoration(
+                      labelText: 'Şifrenizi giriniz :',
+                      labelStyle:
+                          TextStyle(fontSize: 20.0, color: Colors.black),
+                      border: OutlineInputBorder()),
+                  onSaved: (value) {
+                    _password = value!;
+                  },
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    return null;
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () async{
+                    await _submitForm();
+                    login();
+                  },
+                  child: Text('Giriş Yap'),
+                ),
+              ],
+            ),
+          ),
+        );
+      } else {
+        return SizedBox(
+          width: 400,
+          height: 200,
+          child: Container(color: Colors.white),
+        );
+      }
     }
   }
 }
