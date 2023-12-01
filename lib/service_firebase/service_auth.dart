@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fundemetals_of_biomedical/service_firebase/service_database.dart';
 
 class ServiceAuth {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -10,6 +11,8 @@ class ServiceAuth {
               email: email, password: password))
           .user!;
       //update user data from firestore with database service class , user will use here
+
+     await ServiceDatabase().updateUserData(user.uid, user.displayName!, user., userPassword, userBirthDate)
       return true;
     } on FirebaseAuthException catch (firebaseExceptionInstance) {
       return firebaseExceptionInstance.message;
@@ -23,6 +26,7 @@ class ServiceAuth {
       User userInformation = (await firebaseAuth.signInWithEmailAndPassword(
               email: userEmail, password: userPassword))
           .user!;
+      
 
       return true;
     } on FirebaseAuthException catch (e) {

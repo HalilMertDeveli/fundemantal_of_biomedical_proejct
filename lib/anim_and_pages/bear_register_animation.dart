@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 class BearRegisterAnimation extends StatefulWidget {
   @override
   State<BearRegisterAnimation> createState() => _BearRegisterAnimationState();
+
 }
 
 class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
@@ -19,9 +20,12 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   String? _password = '';
   ServiceAuth _authService = new ServiceAuth();
 
+
+
+
+
+
   bool _isLoading = false;
-  
-  
 
   var animationLink = 'assets/login.riv';
 
