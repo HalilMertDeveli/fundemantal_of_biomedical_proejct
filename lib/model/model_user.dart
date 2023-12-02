@@ -1,8 +1,11 @@
 class ModelUser{
-  final int userId;
-  final String userEmail;
-  final String userPassword;
-  final DateTime userBirthDate;
+   String userId="";
+   String userName="";
+   String userEmail="";
+   String userPassword="";
+   String userBirthDate="";
 
-  ModelUser(this.userId,{ required this.userEmail, required this.userPassword, required this.userBirthDate});
+  ModelUser.withValues(this.userId,this.userName, this.userEmail, this.userPassword, this.userBirthDate);
+  ModelUser();
+
 }

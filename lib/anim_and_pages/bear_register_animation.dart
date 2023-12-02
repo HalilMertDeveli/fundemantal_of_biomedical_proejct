@@ -1,29 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fundemetals_of_biomedical/model/model_user.dart';
 import 'package:fundemetals_of_biomedical/pages/page_home.dart';
 import 'package:fundemetals_of_biomedical/service_firebase/service_auth.dart';
+import 'package:fundemetals_of_biomedical/service_firebase/service_database.dart';
 import 'package:fundemetals_of_biomedical/util/util.dart';
 import 'package:rive/rive.dart';
 import 'package:intl/intl.dart';
 
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 class BearRegisterAnimation extends StatefulWidget {
   @override
   State<BearRegisterAnimation> createState() => _BearRegisterAnimationState();
-
 }
 
 class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  ServiceAuth _authService = new ServiceAuth();
+
   String _name = '';
   String _email = '';
   TextEditingController dateInput = TextEditingController();
   String? _password = '';
-  ServiceAuth _authService = new ServiceAuth();
 
+  ModelUser? userModel;
 
+  void updateModelValues(
+      String name, String email, String password, String birthDate) {
+    userModel = new ModelUser.withValues("0", name, email, password, birthDate);
+  }
 
-
-
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+  }
 
   bool _isLoading = false;
 
@@ -39,7 +49,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
 
   late SMINumber lookNum;
 
-  Future<bool> _submitForm()async {
+  Future<bool> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -50,24 +60,34 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
       print('Email: $_email');
       print("password :$_password");
       print("birth date:${dateInput.text}");
-      final resultOfCreating=await _authService.registerUserWithEmailAndPassword(_name.trim(), _email.trim(), _password.toString().trim(),dateInput.text.trim());
-      if (resultOfCreating==true) {
+      final resultOfCreating =
+          await _authService.registerUserWithEmailAndPassword(
+              _name.trim(),
+              _email.trim(),
+              _password.toString().trim(),
+              dateInput.text.trim());
+      if (resultOfCreating == true) {
         navigatePage(context, PageHome());
         setState(() {
-          _isLoading=false;
+          _isLoading = false;
         });
-      }
-      else{
+      } else {
         print("There is error on creating user with auth");
-        
       }
-      
+
       return true;
     } else {
       return false;
     }
   }
 
+  // void submitFormAndSaveDataForRiverpod()async{
+  //   _submitForm().then((success) {
+  //     if(success){
+  //       final modelUserNotifier = read();
+  //     }
+  //   });
+  // }
   initArtboard() {
     rootBundle.load(animationLink).then((value) {
       final file = RiveFile.import(value);
@@ -121,7 +141,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
     isChecking.change(false);
   }
 
-  login() async{
+  login() async {
     isHandsUp.change(false);
     isChecking.change(false);
     bool validateResult = await _submitForm();
@@ -134,142 +154,145 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
 
   @override
   Widget build(BuildContext context) {
-    if(_isLoading == true){
+    if (_isLoading == true) {
       return Center(
         child: CircularProgressIndicator(
           color: Theme.of(context).primaryColor,
         ),
       );
-    }else{
-
-   
-  
-    
-    if (artboard != null) {
-      return Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 400,
-                height: 350,
-                child: Rive(
-                  artboard: artboard!,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-
-              //time picker region end
-              TextFormField(
-                onTap: checking,
-                //move eyes
-                onChanged: ((value) => moveEyes(value)),
-                //move eyes
-                decoration: InputDecoration(
-                  labelText: 'isminizi giriniz :',
-                  labelStyle: TextStyle(fontSize: 20, color: Colors.black),
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (value) {
-                  _name = value!;
-                },
-                validator: (value) {
-                  return validateUserName(value);
-                },
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                onTap: checking,
-                onChanged: ((value) => moveEyes(value)),
-                decoration: InputDecoration(
-                  labelText: 'Email adresinizi  belirleyiniz:',
-                  labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
-                  border: OutlineInputBorder(),
-                ),
-                onSaved: (value) {
-                  _email = value!;
-                },
-                validator: (value) {
-                  return validateEmailAddress(value);
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                onTap: handsUp,
-                decoration: InputDecoration(
-                    labelText: 'Kullanıcı şifrenizi belirleyiniz:',
-                    labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
-                    border: OutlineInputBorder()),
-                onSaved: (value) {
-                  _password = value!;
-                },
-                validator: (value) {
-                  return validatePassword(value);
-                },
-              ),
-              //new time picker region
-              Container(
-                padding: EdgeInsets.all(15),
-                height: MediaQuery.of(context).size.width / 3,
-                child: Center(
-                  child: TextField(
-                    controller: dateInput,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.calendar_today),
-                      labelText: "Lütfen Doğum Tarhinizi giriniz:",
-                    ),
-                    readOnly: true,
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1950),
-                          lastDate: DateTime(2100));
-                      if (pickedDate != null) {
-                        print(pickedDate);
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(formattedDate); //date value is here for usages
-
-                        setState(() {
-                          dateInput.text = formattedDate;
-                        });
-                      }
-                    },
+    } else {
+      if (artboard != null) {
+        return Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 400,
+                  height: 350,
+                  child: Rive(
+                    artboard: artboard!,
                   ),
                 ),
-              ),
-              filledButton(
-                "Kullanıcı Oluştur",
-                Colors.white38,
-                Colors.black12,
-                Colors.black45,
-                Colors.white,
-                () {
-                  _submitForm(); //we are getting values here
-                  login();
-                },
-              )
-            ],
+                SizedBox(
+                  height: 10,
+                ),
+
+                //time picker region end
+                TextFormField(
+                  onTap: checking,
+                  //move eyes
+                  onChanged: ((value) => moveEyes(value)),
+                  //move eyes
+                  decoration: InputDecoration(
+                    labelText: 'isminizi giriniz :',
+                    labelStyle: TextStyle(fontSize: 20, color: Colors.black),
+                    border: OutlineInputBorder(),
+                  ),
+                  onSaved: (value) {
+                    _name = value!;
+                  },
+                  validator: (value) {
+                    return validateUserName(value);
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  onTap: checking,
+                  onChanged: ((value) => moveEyes(value)),
+                  decoration: InputDecoration(
+                    labelText: 'Email adresinizi  belirleyiniz:',
+                    labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
+                    border: OutlineInputBorder(),
+                  ),
+                  onSaved: (value) {
+                    _email = value!;
+                  },
+                  validator: (value) {
+                    return validateEmailAddress(value);
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  onTap: handsUp,
+                  decoration: InputDecoration(
+                      labelText: 'Kullanıcı şifrenizi belirleyiniz:',
+                      labelStyle:
+                          TextStyle(fontSize: 20.0, color: Colors.black),
+                      border: OutlineInputBorder()),
+                  onSaved: (value) {
+                    _password = value!;
+                  },
+                  validator: (value) {
+                    return validatePassword(value);
+                  },
+                ),
+                //new time picker region
+                Container(
+                  padding: EdgeInsets.all(15),
+                  height: MediaQuery.of(context).size.width / 3,
+                  child: Center(
+                    child: TextField(
+                      controller: dateInput,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today),
+                        labelText: "Lütfen Doğum Tarhinizi giriniz:",
+                      ),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1950),
+                            lastDate: DateTime(2100));
+                        if (pickedDate != null) {
+                          print(pickedDate);
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                          print(formattedDate); //date value is here for usages
+
+                          setState(() {
+                            dateInput.text = formattedDate;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                filledButton(
+                  "Kullanıcı Oluştur",
+                  Colors.white38,
+                  Colors.black12,
+                  Colors.black45,
+                  Colors.white,
+                  () {
+                    _submitForm(); //we are getting values here
+                    login();
+                  },
+                ),
+                MaterialButton(
+                  onPressed: () {
+                    ServiceDatabase(uid: 'sad').GettedValues();
+                  },
+                  child: Icon(Icons.stay_current_landscape),
+                )
+              ],
+            ),
           ),
-        ),
-      );
-    } else {
-      return SizedBox(
-        width: 400,
-        height: 200,
-        child: Container(color: Colors.white),
-      );
+        );
+      } else {
+        return SizedBox(
+          width: 400,
+          height: 200,
+          child: Container(color: Colors.white),
+        );
+      }
     }
-     }
   }
 }
