@@ -21,14 +21,13 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
   String _name = '';
   String _email = '';
   TextEditingController dateInput = TextEditingController();
-  String? _password = '';
+  String _password = '';
 
-  ModelUser? userModel;
-
-  void updateModelValues(
-      String name, String email, String password, String birthDate) {
-    userModel = new ModelUser.withValues("0", name, email, password, birthDate);
+  ModelUser updateModelData(String name,String email,String birthData,String password){
+    final modelUser = ModelUser( _name, _email, _password, dateInput.text);
+    return modelUser;
   }
+  
 
   @override
   void setState(VoidCallback fn) {
@@ -60,13 +59,14 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
       print('Email: $_email');
       print("password :$_password");
       print("birth date:${dateInput.text}");
-      final resultOfCreating =
-          await _authService.registerUserWithEmailAndPassword(
-              _name.trim(),
-              _email.trim(),
-              _password.toString().trim(),
-              dateInput.text.trim());
-      if (resultOfCreating == true) {
+      final resultOfCreating  = updateModelData(_name, _email, dateInput.text, _password);
+      // ignore: unused_local_variable
+      final serviceDatabaseInstance =  ServiceDatabase( "null id",modelUser: resultOfCreating);
+      final resultOfCreatingUser = await _authService.registerUserWithEmailAndPassword(
+          _name,_email,_password,dateInput.text,
+        );
+      if (resultOfCreatingUser != false) {
+        
         navigatePage(context, PageHome());
         setState(() {
           _isLoading = false;
@@ -278,7 +278,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    ServiceDatabase(uid: 'sad').GettedValues();
+                    
                   },
                   child: Icon(Icons.stay_current_landscape),
                 )
