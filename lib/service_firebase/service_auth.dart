@@ -12,7 +12,8 @@ class ServiceAuth {
           .user!;
       //update user data from firestore with database service class , user will use here
 
-     //await ServiceDatabase().updateUserData(user.uid, user.displayName!, user., userPassword, userBirthDate)
+      await ServiceDatabase(user.uid).addDataForUserInformation( fullName, email, password, birthDate);
+
       return true;
     } on FirebaseAuthException catch (firebaseExceptionInstance) {
       return firebaseExceptionInstance.message;
@@ -26,7 +27,6 @@ class ServiceAuth {
       User userInformation = (await firebaseAuth.signInWithEmailAndPassword(
               email: userEmail, password: userPassword))
           .user!;
-      
 
       return true;
     } on FirebaseAuthException catch (e) {

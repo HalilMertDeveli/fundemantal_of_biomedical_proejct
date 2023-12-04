@@ -13,13 +13,13 @@ class ServiceDatabase{
 
   final CollectionReference userCollection  = FirebaseFirestore.instance.collection("users");
 
-  Future updateUserData(String userId,String userName,String userEmail,String userPassword,String userBirthDate)async{
-    userCollection.doc(uid).set({
+  Future addDataForUserInformation(String userName,String userEmail,String userPassword,String userBirthDate)async{
+   return await userCollection.doc(uid).set({
       "userId":uid,
-      "userName":modelUser?.userName,
-      "userEmail":modelUser?.userEmail,
-      "userPassword":modelUser?.userPassword,
-      "userBirthdate":modelUser?.userBirthDate,
+      "userName":userName,
+      "userEmail":userEmail,
+      "userPassword":userPassword,
+      "userBirthdate":userBirthDate,
 
 
     });
