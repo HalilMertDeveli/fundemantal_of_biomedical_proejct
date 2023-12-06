@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:fundemetals_of_biomedical/model/model_user.dart';
 import 'package:fundemetals_of_biomedical/pages/page_home.dart';
 import 'package:fundemetals_of_biomedical/service_firebase/service_auth.dart';
-import 'package:fundemetals_of_biomedical/service_firebase/service_database.dart';
 import 'package:fundemetals_of_biomedical/util/util.dart';
 import 'package:rive/rive.dart';
 import 'package:intl/intl.dart';
