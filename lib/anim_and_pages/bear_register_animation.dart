@@ -59,9 +59,8 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
       print('Email: $_email');
       print("password :$_password");
       print("birth date:${dateInput.text}");
-      final resultOfCreating  = updateModelData(_name, _email, dateInput.text, _password);
+      updateModelData(_name, _email, dateInput.text, _password);
       // ignore: unused_local_variable
-      final serviceDatabaseInstance =  ServiceDatabase( "null id",modelUser: resultOfCreating);
       final resultOfCreatingUser = await _authService.registerUserWithEmailAndPassword(
           _name,_email,_password,dateInput.text,
         );
@@ -81,13 +80,7 @@ class _BearRegisterAnimationState extends State<BearRegisterAnimation> {
     }
   }
 
-  // void submitFormAndSaveDataForRiverpod()async{
-  //   _submitForm().then((success) {
-  //     if(success){
-  //       final modelUserNotifier = read();
-  //     }
-  //   });
-  // }
+
   initArtboard() {
     rootBundle.load(animationLink).then((value) {
       final file = RiveFile.import(value);
