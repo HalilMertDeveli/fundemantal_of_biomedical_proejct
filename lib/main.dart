@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fundemetals_of_biomedical/firebase_options.dart';
 import 'package:fundemetals_of_biomedical/pages/page_from_login.dart';
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
+import 'package:fundemetals_of_biomedical/pages/page_home.dart';
 
 Future<void> main()async {
    WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,7 @@ Future<void> main()async {
         gifHeight: double.infinity,
         
         nextScreen: LoginForm(),
+        //nextScreen: PageHome(),
         onInit: () async {
           debugPrint("onInit");
         },
