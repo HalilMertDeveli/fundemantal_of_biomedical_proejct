@@ -6,19 +6,13 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Hello world"),
-      ),
-      body: Column(
-        children: [
-          Text(
-            "Musa Develi",
-            style: TextStyle(
-              fontFamily: "BungeeSpice",
-              fontSize: 22,
-            ),
-          ),
-        ],
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        child: Image.asset(
+          "lib/assets/img/splash/Splash2x.png",
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }
